@@ -21,10 +21,28 @@ module.exports = {
 //	getting users
 	getAllUsers: async (req, res) => {
 		try {
-			const users = await User.findAll({});
-			res.json(users);
+			const usersData = await User.findAll({});
+			
+			const users= usersData.map(user => user.get({plain: true}));
+			console.log(users);
+			res.render('allUsers', {
+				users,
+				favoriteFood: 'Ice cream sandwich',
+
+			});
 		} catch (e) {
 			res.json(e);
 		}
 	},
+	getUserById: async (req, res) => {
+		try {
+			const userData = await User.findByPk(req.params.userId);
+			const user = userData.get({plain: true});
+			res.render('singleUser', {
+				user
+			});
+		} catch (e) {
+			res.json(e);
+		}
+	}
 }
